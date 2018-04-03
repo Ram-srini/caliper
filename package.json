@@ -29,7 +29,6 @@
     "ps-node": "^0.1.6",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
-    "sawtooth-sdk": "file:../sawtooth/sawtooth-core/sdk/javascript",
     "systeminformation": "^3.23.7",
     "table": "^4.0.1",
     "tape": "^4.8.0",
