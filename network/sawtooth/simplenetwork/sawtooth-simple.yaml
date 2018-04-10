@@ -40,7 +40,7 @@ services:
     expose:
       - 4004
     volumes:
-      - '.:/project/'
+      - '../../../../caliper/:/project/'
     entrypoint: simple-tp-python -vv -C tcp://validator:4004
     stop_signal: SIGKILL
 
@@ -86,8 +86,7 @@ services:
       - https_proxy=$https_proxy
       - no_proxy=$no_proxy
     volumes:
-      - '../:/project/'
-      - './run_install.sh:/usr/bin/run_install.sh'
+      - '.:/project/'
     entrypoint: "bash -c \"\
                  sawtooth keygen && \
                  tail -f /dev/null \

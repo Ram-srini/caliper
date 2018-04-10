@@ -83,8 +83,10 @@ RUN echo "deb http://repo.sawtooth.me/ubuntu/ci xenial universe" >> /etc/apt/sou
 
 WORKDIR /project/src/contract/sawtooth/simple/simple_python
 
-ENV PATH "$PATH:/project/:."
+ENV PATH "$PATH:/project/:/project/src/contract/sawtooth/simple/simple_python:."
 
+RUN echo "$PATH"
+RUN echo "`pwd`"
 EXPOSE 4004/tcp
 
 CMD unset PYTHONPATH && python3 setup.py clean --all && python3 setup.py build
