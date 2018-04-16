@@ -26,6 +26,7 @@
     "node-zookeeper-client": "^0.2.2",
     "ora": "^1.2.0",
     "pidusage": "^1.1.6",
+    "protocol-buffers": "^4.0.4",
     "ps-node": "^0.1.6",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
