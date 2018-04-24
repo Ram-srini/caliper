@@ -34,14 +34,9 @@ class SmallBankBatchBuilder extends BatchBuilder {
         return addresses;
     }
 
-    buildBatch(args) {
+    buildTransaction(args, signer) {
         const {createHash} = require('crypto');
-        const {createContext, CryptoFactory} = require('sawtooth-sdk/signing');
-        const context = createContext('secp256k1');
         const {protobuf} = require('sawtooth-sdk');
-
-        const privateKey = context.newRandomPrivateKey();
-        const signer = new CryptoFactory(context).newSigner(privateKey);
 
         //get customer ids from the argument and calculate the addresses from
         //customer ids
@@ -54,9 +49,9 @@ class SmallBankBatchBuilder extends BatchBuilder {
             input_address.push(out_address);
             output_address.push(out_address);
         }
-        //Generate protobuf payload from input args 
+        //Generate protobuf payload from input args
         const payloadBytes = buildPayload(args);
-        
+
         //Construct transaction header
         const transactionHeaderBytes = protobuf.TransactionHeader.encode({
             familyName: this.familyName,
@@ -66,7 +61,7 @@ class SmallBankBatchBuilder extends BatchBuilder {
             signerPublicKey: signer.getPublicKey().asHex(),
             batcherPublicKey: signer.getPublicKey().asHex(),
             dependencies: [],
-            payloadSha512: createHash('sha512').update(payloadBytes).digest('hex') 
+            payloadSha512: createHash('sha512').update(payloadBytes).digest('hex')
         }).finish();
 
         //construct transaction
@@ -76,9 +71,24 @@ class SmallBankBatchBuilder extends BatchBuilder {
             headerSignature: txnSignature,
             payload: payloadBytes
         });
+        return transaction;
+    }
+
+	buildBatch(args) {
+        const {createContext, CryptoFactory} = require('sawtooth-sdk/signing');
+        const context = createContext('secp256k1');
+        const {protobuf} = require('sawtooth-sdk');
+
+        const privateKey = context.newRandomPrivateKey();
+        const signer = new CryptoFactory(context).newSigner(privateKey);
+
+        var transactions = [];
+        for(var i = 0; i<args.length; i++) {
+            var transaction = this.buildTransaction(args[i],signer);
+            transactions.push(transaction);
+        }
 
         //constrcut batch
-        const transactions = [transaction]
         const batchHeaderBytes = protobuf.BatchHeader.encode({
             signerPublicKey: signer.getPublicKey().asHex(),
             transactionIds: transactions.map((txn) => txn.headerSignature),
@@ -98,6 +108,7 @@ class SmallBankBatchBuilder extends BatchBuilder {
 
         return batchListBytes;
     }
+
 }
 
 module.exports = SmallBankBatchBuilder;
@@ -105,36 +116,21 @@ module.exports = SmallBankBatchBuilder;
 function getCustomerIds(args) {
     var cust_ids = [];
     //Based on the payload type get the customer ids
-    switch(args['PayloadType']) {
-        case 1: 
-                var message = args['CreateAccountTransactionData'];
-                cust_ids.push(message['customer_id']);
-                break;
-        case 2: 
-                var message = args['DepositCheckingTransactionData'];
-                cust_ids.push(message['customer_id']);
-                break;
-        case 3: 
-                var message = args['WriteCheckTransactionData'];
-                cust_ids.push(message['customer_id']);
-                break;
-        case 4: 
-                var message = args['TransactSavingsTransactionData'];
-                cust_ids.push(message['customer_id']);
-                break;
-        case 5: 
-                var message = args['SendPaymentTransactionData'];
-                cust_ids.push(message['source_customer_id']);
-                cust_ids.push(message['dest_customer_id']);
-                break;
-        case 6: 
-                var message = args['AmalgamateTransactionData'];
-                cust_ids.push(message['source_customer_id']);
-                cust_ids.push(message['dest_customer_id']);
-                break;
-        default:
-                console.log("Error: Unknown payload type" + args['payload_type']); 
-                break;
+    switch(args['transaction_type']) {
+        case "create_account": 
+	case "deposit_checking":
+	case "write_check":
+        case "transact_savings":
+	    cust_ids.push(args['customer_id']);
+            break;
+        case "send_payment":
+	case "amalgamate":
+	    cust_ids.push(args['source_customer_id']);
+            cust_ids.push(args['dest_customer_id']);
+            break;
+	default:
+            console.log("Error: Unknown payload type" + args['payload_type']); 
+            break;
         }
     console.log(cust_ids);
         return cust_ids;
@@ -143,24 +139,24 @@ function getCustomerIds(args) {
 function buildPayload(args) {
     var payloadBytes;
     //Based on the payload type construct the protobuf message
-    switch(args['PayloadType']) {
-        case 1:
-            payloadBytes = createAccountPayload(args['CreateAccountTransactionData']);
+    switch(args['transaction_type']) {
+        case "create_account":
+            payloadBytes = createAccountPayload(args);
             break;
-        case 2:
-            payloadBytes = createDepositCheckingPayload(args['DepositCheckingTransactionData']);
+        case "deposit_checking":
+            payloadBytes = createDepositCheckingPayload(args);
             break;
-        case 3:
-            payloadBytes = createWriteCheckPayload(args['WriteCheckTransactionData']);
+        case "write_check":
+            payloadBytes = createWriteCheckPayload(args);
             break;
-        case 4:
-            payloadBytes = createTransactSavingsPayload(args['TransactSavingsTransactionData']);
+        case "transact_savings":
+            payloadBytes = createTransactSavingsPayload(args);
             break;
-        case 5:
-            payloadBytes = createSendPaymentPayload(args['SendPaymentTransactionData']);
+        case "send_payment":
+            payloadBytes = createSendPaymentPayload(args);
             break;
-        case 6:
-            payloadBytes = createAmalgamatePayload(args['AmalgamateTransactionData']);
+        case "amalgamate":
+            payloadBytes = createAmalgamatePayload(args);
             break;
     }
     return payloadBytes;
