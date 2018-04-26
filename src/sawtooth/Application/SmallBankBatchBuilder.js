@@ -1,3 +1,12 @@
+/**
+ * Copyright 2017 HUAWEI All Rights Reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @file, batch builder definition for small bank use case.
+ **/
+
+
 'use strict'
 
 var BatchBuilder = require('./BatchBuilder.js')
@@ -21,7 +30,6 @@ class SmallBankBatchBuilder extends BatchBuilder {
 
         const familyNameSpace = _hash(this.familyName).substring(0, 6);
         let address = familyNameSpace + hexAddress.substring(0,64);
-        console.log('address: '+address);
         return address;
     }
 
@@ -132,8 +140,7 @@ function getCustomerIds(args) {
             console.log("Error: Unknown payload type" + args['payload_type']); 
             break;
         }
-    console.log(cust_ids);
-        return cust_ids;
+    return cust_ids;
 }
 
 function buildPayload(args) {

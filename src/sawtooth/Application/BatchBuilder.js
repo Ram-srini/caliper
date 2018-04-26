@@ -5,7 +5,7 @@ class BatchBuilder {
     }
 
     buildBatch(args) {
-        throw new Error('buildiBatch is not implemented for this application!!');
+        throw new Error('buildBatch is not implemented for this application!!');
     }
 
     calculateAddress(name) {

@@ -13,17 +13,16 @@ module.exports.info  = "querying accounts";
 var bc, contx;
 var no_accounts;
 module.exports.init = function(blockchain, context, args) {
-    var acc = require('./createAccount.js');
+    var acc = require('./smallbankOperations.js');
     bc       = blockchain;
     contx    = context;
-    no_accounts = acc.accounts;
+    no_accounts = acc.no_accounts;
     return Promise.resolve();
 }
 
 module.exports.run = function() {
-    var acc  = no_accounts[Math.floor(Math.random()*(no_accounts.length))];
-
-    return bc.queryState(contx, 'smallbank', 'v0', acc);
+    var acc_num  = Math.floor(Math.random()*(no_accounts));
+    return bc.queryState(contx, 'smallbank', 'v0', acc_num);
 }
 
 module.exports.end = function(results) {
