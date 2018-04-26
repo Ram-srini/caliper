@@ -1,3 +1,12 @@
+/**
+ * Copyright 2017 HUAWEI All Rights Reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * @file, batchBuilder for simple use case and it use case specific logic to
+ * buildBatch and calculateAddress
+ **/
+
 'use strict'
 
 var BatchBuilder = require('./BatchBuilder.js')
