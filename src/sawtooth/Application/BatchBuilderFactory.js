@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-'use strict'
-
-var SimpleBatchBuilder = require('./SimpleBatchBuilder.js')
-var SmallBankBatchBuilder = require('./SmallBankBatchBuilder.js')
-=======
 /**
  * Copyright 2017 HUAWEI All Rights Reserved.
  *
@@ -15,7 +9,7 @@ var SmallBankBatchBuilder = require('./SmallBankBatchBuilder.js')
 'use strict'
 
 var SimpleBatchBuilder = require('./SimpleBatchBuilder.js')
->>>>>>> be97ebf2e41ac5a4e9829c08742668cf2e9f58ae
+var SmallBankBatchBuilder = require('./SmallBankBatchBuilder.js')
 
 class BatchBuilderFactory {
     static getBatchBuilder(familyName, familyVersion) {
