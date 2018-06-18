@@ -4,6 +4,34 @@
 #
 
 ---
+################################################################################
+#
+#   Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool
+#
+################################################################################
+Profiles:
+
+    TwoOrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg0
+                - *OrdererOrg1
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org0
+                    - *Org1
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org0
+                - *Org1
 
 ################################################################################
 #
@@ -17,17 +45,23 @@ Organizations:
 
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
-    - &OrdererOrg
+    - &OrdererOrg0
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: OrdererMSP
+        Name: Orderer1MSP
 
         # ID to load the MSP definition as
-        ID: OrdererMSP
+        ID: Orderer1MSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+        MSPDir: crypto-config/ordererOrganizations/org1.example.com/msp
 
+        AdminPrincipal: Role.MEMBER
+
+    - &OrdererOrg1
+        Name: Orderer2MSP
+        ID: Orderer2MSP
+        MSPDir: crypto-config/ordererOrganizations/org2.example.com/msp
         AdminPrincipal: Role.MEMBER
 
     - &Org0
@@ -84,7 +118,7 @@ Orderer: &OrdererDefaults
 
     # Orderer Type: The orderer implementation to start
     # Available types are "solo" and "kafka"
-    OrdererType: solo
+    OrdererType: kafka
 
     Addresses:
         - orderer.example.com:7050
@@ -113,7 +147,10 @@ Orderer: &OrdererDefaults
         # Brokers: A list of Kafka brokers to which the orderer connects
         # NOTE: Use IP:port notation
         Brokers:
-            - 127.0.0.1:9092
+            - kafka0:9092
+            - kafka1:9092
+            - kafka2:9092
+            - kafka3:9092
 
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network
@@ -132,31 +169,3 @@ Application: &ApplicationDefaults
     # Organizations is the list of orgs which are defined as participants on
     # the application side of the network
     Organizations:
-
-################################################################################
-#
-#   Profile
-#
-#   - Different configuration profiles may be encoded here to be specified
-#   as parameters to the configtxgen tool
-#
-################################################################################
-Profiles:
-
-    TwoOrgsOrdererGenesis:
-        Orderer:
-            <<: *OrdererDefaults
-            Organizations:
-                - *OrdererOrg
-        Consortiums:
-            SampleConsortium:
-                Organizations:
-                    - *Org0
-                    - *Org1
-    TwoOrgsChannel:
-        Consortium: SampleConsortium
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - *Org0
-                - *Org1

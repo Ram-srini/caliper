@@ -10,13 +10,25 @@ OrdererOrgs:
   # ---------------------------------------------------------------------------
   # Orderer
   # ---------------------------------------------------------------------------
-  - Name: Orderer
-    Domain: example.com
+  - Name: OrdererOrg1
+    Domain: org1.example.com
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
-    Specs:
-      - Hostname: orderer
+    #Specs:
+    #  - Hostname: orderer
+    Template:
+      Count: 2
+
+  - Name: OrdererOrg2
+    Domain: org2.example.com
+    # ---------------------------------------------------------------------------
+    # "Specs" - See PeerOrgs below for complete description
+    # ---------------------------------------------------------------------------
+    #Specs:
+    #  - Hostname: orderer
+    Template:
+      Count: 2
 # ---------------------------------------------------------------------------
 # "PeerOrgs" - Definition of organizations managing peer nodes
 # ---------------------------------------------------------------------------
@@ -60,7 +72,7 @@ PeerOrgs:
     # name collisions
     # ---------------------------------------------------------------------------
     Template:
-      Count: 2
+      Count: 5
       # Start: 5
       # Hostname: {{.Prefix}}{{.Index}} # default
     # ---------------------------------------------------------------------------
@@ -76,6 +88,6 @@ PeerOrgs:
   - Name: Org2
     Domain: org2.example.com
     Template:
-      Count: 2
+      Count: 5
     Users:
       Count: 1
