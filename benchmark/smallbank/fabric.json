@@ -1,103 +1,112 @@
 {
   "fabric": {
-    "cryptodir": "network/fabric/simplenetwork/crypto-config",
+    "cryptodir": "/opt/gopath/bc1st/fabric/run/keyfiles",
     "network": {
       "orderer": {
-        "url": "grpcs://localhost:7050",
-        "mspid": "OrdererMSP",
+        "url": "grpcs://fabric001:7050",
+        "mspid": "orgc",
+        "domain": "orgc",
         "user": {
-          "key": "network/fabric/simplenetwork/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/be595291403ff68280a724d7e868521815ad9e2fc8c5486f6d7ce6b62d6357cd_sk",
-          "cert": "network/fabric/simplenetwork/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem"
+          "key": "/opt/gopath/bc1st/fabric/run/keyfiles/orgc/users/Admin@orgc/msp/keystore/fa03156dd48750a0aa2386049bc0cdf7b5b9ee29c4411fd1342ed5098681bc84_sk",
+          "cert": "/opt/gopath/bc1st/fabric/run/keyfiles/orgc/users/Admin@orgc/msp/signcerts/Admin@orgc-cert.pem"
         },
-        "server-hostname": "orderer.example.com",
-        "tls_cacerts": "network/fabric/simplenetwork/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt"
+        "server-hostname": "orderer1st-orgc",
+        "tls_cacerts": "/opt/gopath/bc1st/fabric/run/keyfiles/orgc/orderers/orderer1st-orgc.orgc/tls/ca.crt"
       },
-      "org1": {
-        "name": "peerOrg1",
-        "mspid": "Org1MSP",
+      "orga": {
+        "name": "orga",
+        "mspid": "orga",
+        "domain": "orga",
         "user": {
-          "key": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/0d2b2fc385b10fa59003217e1bb5af2d24a3d762266e287867a1bc290eb44657_sk",
-          "cert": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem"
+          "key": "/opt/gopath/bc1st/fabric/run/keyfiles/orga/users/Admin@orga/msp/keystore/f63e71dfbe18ba06abb670cdd98cc9a51e24c0f343bd1f1fd564b42bcc97cc6f_sk",
+          "cert": "/opt/gopath/bc1st/fabric/run/keyfiles/orga/users/Admin@orga/msp/signcerts/Admin@orga-cert.pem"
         },
         "ca": {
-          "url": "https://localhost:7054",
-          "name": "ca-org1"
+          "url": "https://fabric001:7054",
+          "name": "ca1st-orga"
         },
         "peer1": {
-          "requests": "grpcs://localhost:7051",
-          "events": "grpcs://localhost:7053",
-          "server-hostname": "peer0.org1.example.com",
-          "tls_cacerts": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+          "requests": "grpcs://fabric001:7051",
+          "events": "grpcs://fabric001:7053",
+          "server-hostname": "peer1st-orga",
+          "tls_cacerts": "/opt/gopath/bc1st/fabric/run/keyfiles/orga/peers/peer1st-orga.orga/tls/ca.crt"
         },
         "peer2": {
-          "requests": "grpcs://localhost:7057",
-          "events": "grpcs://localhost:7059",
-          "server-hostname": "peer1.org1.example.com",
-          "tls_cacerts": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
+          "requests": "grpcs://fabric002:7051",
+          "events": "grpcs://fabric002:7053",
+          "server-hostname": "peer2nd-orga",
+          "tls_cacerts": "/opt/gopath/bc1st/fabric/run/keyfiles/orga/peers/peer2nd-orga.orga/tls/ca.crt"
         }
       },
-      "org2": {
-        "name": "peerOrg2",
-        "mspid": "Org2MSP",
+      "orgb": {
+        "name": "orgb",
+        "mspid": "orgb",
+        "domain": "orgb",
         "ca": {
-          "url": "https://localhost:8054",
-          "name": "ca-org2"
+          "url": "https://fabric002:7054",
+          "name": "ca1st-orgb"
         },
         "peer1": {
-          "requests": "grpcs://localhost:8051",
-          "events": "grpcs://localhost:8053",
-          "server-hostname": "peer0.org2.example.com",
-          "tls_cacerts": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+          "requests": "grpcs://fabric006:7051",
+          "events": "grpcs://fabric006:7053",
+          "server-hostname": "peer1st-orgb",
+          "tls_cacerts": "/opt/gopath/bc1st/fabric/run/keyfiles/orgb/peers/peer1st-orgb.orgb/tls/ca.crt"
         },
         "peer2": {
-          "requests": "grpcs://localhost:8057",
-          "events": "grpcs://localhost:8059",
-          "server-hostname": "peer1.org2.example.com",
-          "tls_cacerts": "network/fabric/simplenetwork/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt"
+          "requests": "grpcs://fabric007:7051",
+          "events": "grpcs://fabric007:7053",
+          "server-hostname": "peer2nd.orgb",
+          "tls_cacerts": "/opt/gopath/bc1st/fabric/run/keyfiles/orgb/peers/peer2nd-orgb.orgb/tls/ca.crt"
         }
       }
     },
     "channel": [
       {
-        "name": "mychannel",
-        "config": "network/fabric/simplenetwork/mychannel.tx",
-        "organizations": ["org1", "org2"],
-        "deployed": false
+        "name": "firstchannel",
+        "config": "/opt/gopath/bc1st/fabric/run/keyfiles/firstchannel.tx",
+        "organizations": ["orga", "orgb"],
+        "deployed": true
       }
     ],
-    "chaincodes": [{"id": "smallbank", "path": "contract/fabric/smallbank", "language":"golang", "version": "v0", "channel": "mychannel"}],
+    "chaincodes": [{"id": "smallbank", "path": "contract/fabric/smallbank", "language":"golang", "version": "v0", "channel": "firstchannel"}],
     "endorsement-policy": {
       "identities": [
         {
           "role": {
             "name": "member",
-            "mspId": "Org1MSP"
+            "mspId": "orga"
           }
         },
         {
           "role": {
             "name": "member",
-            "mspId": "Org2MSP"
+            "mspId": "orgb"
+          }
+        },
+		{
+          "role": {
+            "name": "member",
+            "mspId": "orgc"
           }
         },
         {
           "role": {
             "name": "admin",
-            "mspId": "Org1MSP"
+            "mspId": "orgc"
           }
         }
       ],
       "policy": { "2-of": [{"signed-by": 0}, {"signed-by": 1}]}
     },
     "context": {
-      "smallOperations": "mychannel",
-      "query": "mychannel"
+      "smallOperations": "firstchannel",
+      "query": "firstchannel"
     }
   },
   "info" : {
     "Version": "1.1.0",
-    "Size": "4 Peers",
-    "Orderer": "Solo",
+    "Size": "10 Peers",
+    "Orderer": "Kafka",
     "Distribution": "Single Host"
   }
 }
