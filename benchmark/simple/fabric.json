@@ -8,7 +8,7 @@
         "mspid": "OrdererMSP",
         "server-hostname": "orderer0.example.com",
         "tls_cacerts": "/var/mynetwork/certs/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt",
-        "url": "grpcs://192.168.1.32:7050",
+        "url": "grpcs://10.10.0.20:7050",
         "user": {
           "cert": "/var/mynetwork/certs/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/Admin@example.com-cert.pem",
           "key": "/var/mynetwork/certs/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp/keystore/c2f546e3d70f8c26d1c9eab7579405bc4092c2ffaf480ec6c7f46d89bb973595_sk"
@@ -17,14 +17,14 @@
       "org1": {
         "ca": {
           "name": "ca-org1",
-          "url": "https://192.168.1.32:7054"
+          "url": "https://10.10.0.20:7054"
         },
         "domain": "org1.example.com",
         "mspid": "Org1MSP",
         "name": "peerOrg1",
         "peer1": {
-          "events": "grpcs://192.168.1.32:7053",
-          "requests": "grpcs://192.168.1.32:7051",
+          "events": "grpcs://10.10.0.20:7053",
+          "requests": "grpcs://10.10.0.20:7051",
           "server-hostname": "peer0.org1.example.com",
           "tls_cacerts": "/var/mynetwork/certs/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
         },

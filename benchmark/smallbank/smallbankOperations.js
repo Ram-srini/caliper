@@ -165,7 +165,7 @@ module.exports.init = function(blockchain, context, args) {
 
 module.exports.run = function() {
     let args = generateWorkload();
-    return bc.invokeSmartContract(contx, 'smallbank', '1.0', args, 30);
+    return bc.invokeSmartContract(contx, 'smallbank', '1.0', args, 60);
 };
 
 module.exports.end = function() {
