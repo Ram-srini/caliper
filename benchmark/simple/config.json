@@ -19,8 +19,8 @@
       },
       {
         "label" : "query",
-        "txNumber" : [5000, 5000,5000,5000,5000,5000,5000],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 500}}, {"type": "fixed-rate", "opts": {"tps" : 600}},{"type": "fixed-rate", "opts": {"tps" : 500}},{"type": "fixed-rate", "opts": {"tps" : 500}},{"type": "fixed-rate", "opts": {"tps" : 500}},{"type": "fixed-rate", "opts": {"tps" : 500}},{"type": "fixed-rate", "opts": {"tps" : 500}}],
+        "txNumber" : [5000,5000,5000,5000,5000,5000,5000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 300}}, {"type": "fixed-rate", "opts": {"tps" : 400}},{"type": "fixed-rate", "opts": {"tps" : 500}},{"type": "fixed-rate", "opts": {"tps" : 600}},{"type": "fixed-rate", "opts": {"tps" : 700}},{"type": "fixed-rate", "opts": {"tps" : 800}},{"type": "fixed-rate", "opts": {"tps" : 900}}],
         "callback" : "benchmark/simple/query.js"
       }]
   },
