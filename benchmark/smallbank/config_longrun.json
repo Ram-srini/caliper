@@ -14,7 +14,7 @@
       {
         "label" : "smallOperations",
         "txDuration" : [3000],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 160}}],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 140}}],
         "arguments": {"accounts":20000, "txnPerBatch":10},
         "callback" : "benchmark/smallbank/smallbankOperations.js"
       },
