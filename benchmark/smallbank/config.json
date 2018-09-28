@@ -13,9 +13,9 @@
     "rounds": [
       {
         "label" : "smallOperations",
-        "txNumber" : [10000,10000,10000,10000,10000,10000,10000],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 80}},{"type": "fixed-rate", "opts": {"tps" : 110}},{"type": "fixed-rate", "opts": {"tps" : 140}},{"type": "fixed-rate", "opts": {"tps" : 170}},{"type": "fixed-rate", "opts": {"tps" :200}},{"type": "fixed-rate", "opts": {"tps" : 230}},{"type": "fixed-rate", "opts": {"tps" : 260}}],
-        "arguments": {"accounts":10000, "txnPerBatch":10},
+        "txNumber" : [10000,10000,10000,10000,10000,10000,10000,10000,10000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 80}},{"type": "fixed-rate", "opts": {"tps" : 110}},{"type": "fixed-rate", "opts": {"tps" : 140}},{"type": "fixed-rate", "opts": {"tps" : 170}},{"type": "fixed-rate", "opts": {"tps" :200}},{"type": "fixed-rate", "opts": {"tps" : 230}},{"type": "fixed-rate", "opts": {"tps" : 260}},{"type": "fixed-rate", "opts": {"tps" : 300}},{"type": "fixed-rate", "opts": {"tps" : 400}}],
+        "arguments": {"accounts":20000, "txnPerBatch":10},
         "callback" : "benchmark/smallbank/smallbankOperations.js"
       },
       {
