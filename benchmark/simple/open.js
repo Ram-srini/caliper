@@ -10,14 +10,19 @@
 module.exports.info  = 'opening accounts';
 
 let accounts = [];
+let txnPerBatch;
 let initMoney;
 let bc, contx;
 module.exports.init = function(blockchain, context, args) {
     if(!args.hasOwnProperty('money')) {
         return Promise.reject(new Error('simple.open - "money" is missed in the arguments'));
     }
+    if(!args.hasOwnProperty('txnPerBatch')) {
+        return Promise.reject(new Error('simple.open - \'txnPerBatch\' is missed in the arguments'));
+    }
 
-    initMoney = args.money.toString();
+    initMoney = args.money;
+    txnPerBatch = args.txnPerBatch;
     bc = blockchain;
     contx = context;
     return Promise.resolve();
@@ -51,10 +56,27 @@ function generateAccount() {
     return prefix + get26Num(accounts.length+1);
 }
 
+/**
+ *Generates simple workload
+ *@returns {Object} array of json objects
+ */
+function generateWorkload() {
+    let workload = [];
+    for(let i= 0; i < txnPerBatch; i++) {
+        let acc_id = generateAccount();
+        account.push(acc_id);
+        let acc = {
+            'Verb': 'open',
+            'Name': acc_id,
+            'Value': initMoney
+        };
+    workload.push(acc);
+    }
+    return workload;
+}
 module.exports.run = function() {
-    let newAcc = generateAccount();
-    accounts.push(newAcc);
-    return bc.invokeSmartContract(contx, 'intkey', 'v0', {Verb: 'set', Name: newAcc, Value: 10000}, 60);
+    let args = generateWorkload();
+    return bc.invokeSmartContract(contx, 'intkey', 'v0', args, 120);
 };
 
 module.exports.end = function() {
