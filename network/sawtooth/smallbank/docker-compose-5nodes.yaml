@@ -1,0 +1,565 @@
+# Copyright 2017 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+version: "2.1"
+
+volumes:
+  sawtooth-keys-0:
+  sawtooth-db-0:
+  sawtooth-keys-1:
+  sawtooth-db-1:
+  sawtooth-keys-2:
+  sawtooth-db-2:
+  sawtooth-keys-3:
+  sawtooth-db-3:
+  sawtooth-keys-4:
+  sawtooth-db-4:
+
+services:
+
+  validator-0:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-0:/etc/sawtooth/keys
+      - sawtooth-db-0:/var/lib/sawtooth
+    expose:
+      - 4004
+      - 8800
+    working_dir: /root
+    command: "bash -c \"\
+        cp /project/sawtooth-poet/tests/sawtooth_poet_tests/poet_liveness_data/validator-0.toml /etc/sawtooth/validator.toml && \
+        sawadm keygen --force && \
+        sawset genesis \
+          -k /etc/sawtooth/keys/validator.priv \
+          -o config-genesis.batch && \
+        sawset proposal create \
+          -k /etc/sawtooth/keys/validator.priv \
+          sawtooth.consensus.algorithm=poet \
+          sawtooth.poet.report_public_key_pem=\
+          \\\"$$(cat /project/sawtooth-poet/simulator/packaging/simulator_rk_pub.pem)\\\" \
+          sawtooth.poet.valid_enclave_measurements=$$(poet enclave measurement) \
+          sawtooth.poet.valid_enclave_basenames=$$(poet enclave basename) \
+          -o config.batch && \
+		sawset proposal create -k /etc/sawtooth/keys/validator.priv \
+		sawtooth.poet.target_wait_time=1 \
+		sawtooth.poet.initial_wait_time=5 \
+        sawtooth.publisher.max_batches_per_block=1000 \
+        sawtooth.poet.ztest_minimum_win_count=10000 \
+        sawtooth.poet.key_block_claim_limit=100000 \
+		-o poet_setting.batch && \
+        poet registration create -k /etc/sawtooth/keys/validator.priv -o poet.batch && \
+        sawadm genesis \
+          config-genesis.batch config.batch poet.batch poet_setting.batch && \
+        sawtooth-validator -vv
+    \""
+    stop_signal: SIGKILL
+    environment:
+      PYTHONPATH: "/project/sawtooth-poet/families/block_info"
+
+  validator-1:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-1:/etc/sawtooth/keys
+      - sawtooth-db-1:/var/lib/sawtooth
+    expose:
+      - 4004
+      - 8800
+    command: "bash -c \"\
+        cp /project/sawtooth-poet/tests/sawtooth_poet_tests/poet_liveness_data/validator-1.toml /etc/sawtooth/validator.toml && \
+        sawadm keygen --force && \
+        sawtooth-validator -vv
+    \""
+    environment:
+      PYTHONPATH: "/project/sawtooth-poet/families/block_info"
+    stop_signal: SIGKILL
+
+  validator-2:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-2:/etc/sawtooth/keys
+      - sawtooth-db-2:/var/lib/sawtooth
+    expose:
+      - 4004
+      - 8800
+    command: "bash -c \"\
+        cp /project/sawtooth-poet/tests/sawtooth_poet_tests/poet_liveness_data/validator-2.toml /etc/sawtooth/validator.toml && \
+        sawadm keygen --force && \
+        sawtooth-validator -vv
+    \""
+    environment:
+      PYTHONPATH: "/project/sawtooth-poet/families/block_info"
+    stop_signal: SIGKILL
+
+  validator-3:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-3:/etc/sawtooth/keys
+      - sawtooth-db-3:/var/lib/sawtooth
+    expose:
+      - 4004
+      - 8800
+    command: "bash -c \"\
+        cp /project/sawtooth-poet/tests/sawtooth_poet_tests/poet_liveness_data/validator-3.toml /etc/sawtooth/validator.toml && \
+        sawadm keygen --force && \
+        sawtooth-validator -vv
+    \""
+    environment:
+      PYTHONPATH: "/project/sawtooth-poet/families/block_info"
+    stop_signal: SIGKILL
+
+  validator-4:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-4:/etc/sawtooth/keys
+      - sawtooth-db-4:/var/lib/sawtooth
+    expose:
+      - 4004
+      - 8800
+    command: "bash -c \"\
+        cp /project/sawtooth-poet/tests/sawtooth_poet_tests/poet_liveness_data/validator-4.toml /etc/sawtooth/validator.toml && \
+        sawadm keygen --force && \
+        sawtooth-validator -vv
+    \""
+    environment:
+      PYTHONPATH: "/project/sawtooth-poet/families/block_info"
+    stop_signal: SIGKILL
+
+  poet-0:
+    image: sawtooth-poet-engine$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-0:/etc/sawtooth/keys
+      - sawtooth-db-0:/var/lib/sawtooth
+    command: poet-engine --connect tcp://validator-0:5005 --component tcp://validator-0:4004 -vv
+    depends_on:
+      - validator-0
+    stop_signal: SIGKILL
+
+  poet-1:
+    image: sawtooth-poet-engine$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-1:/etc/sawtooth/keys
+      - sawtooth-db-1:/var/lib/sawtooth
+    command: poet-engine --connect tcp://validator-1:5005 --component tcp://validator-1:4004 -vv
+    depends_on:
+      - validator-1
+    stop_signal: SIGKILL
+
+  poet-2:
+    image: sawtooth-poet-engine$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-2:/etc/sawtooth/keys
+      - sawtooth-db-2:/var/lib/sawtooth
+    command: poet-engine --connect tcp://validator-2:5005 --component tcp://validator-2:4004 -vv
+    depends_on:
+      - validator-2
+    stop_signal: SIGKILL
+
+  poet-3:
+    image: sawtooth-poet-engine$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-3:/etc/sawtooth/keys
+      - sawtooth-db-3:/var/lib/sawtooth
+    command: poet-engine --connect tcp://validator-3:5005 --component tcp://validator-3:4004 -vv
+    depends_on:
+      - validator-3
+    stop_signal: SIGKILL
+
+  poet-4:
+    image: sawtooth-poet-engine$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+      - sawtooth-keys-4:/etc/sawtooth/keys
+      - sawtooth-db-4:/var/lib/sawtooth
+    command: poet-engine --connect tcp://validator-4:5005 --component tcp://validator-4:4004 -vv
+    depends_on:
+      - validator-4
+    stop_signal: SIGKILL
+
+  rest-api-0:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+      - 8008
+    ports:
+      - "8008:8008"
+    command: sawtooth-rest-api -vv --connect tcp://validator-0:4004 --bind rest-api-0:8008
+    depends_on:
+      - validator-0
+    stop_signal: SIGKILL
+
+  rest-api-1:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+      - 8008
+    ports:
+      - "8009:8009"
+    command: sawtooth-rest-api -vv --connect tcp://validator-1:4004 --bind rest-api-1:8009
+    depends_on:
+      - validator-1
+    stop_signal: SIGKILL
+
+  rest-api-2:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+      - 8008
+    ports:
+      - "8010:8010"
+    command: sawtooth-rest-api -vv --connect tcp://validator-2:4004 --bind rest-api-2:8010
+    depends_on:
+      - validator-2
+    stop_signal: SIGKILL
+
+  rest-api-3:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+      - 8008
+    ports:
+      - "8011:8011"
+    command: sawtooth-rest-api -vv --connect tcp://validator-3:4004 --bind rest-api-3:8011
+    depends_on:
+      - validator-3
+    stop_signal: SIGKILL
+
+  rest-api-4:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+      - 8008
+    ports:
+      - "8012:8012"
+    command: sawtooth-rest-api -vv --connect tcp://validator-4:4004 --bind rest-api-4:8012
+    depends_on:
+      - validator-4
+    stop_signal: SIGKILL
+
+  intkey-tp-0:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: intkey-tp-python -vv -C tcp://validator-0:4004
+    depends_on:
+      - validator-0
+    stop_signal: SIGKILL
+
+  intkey-tp-1:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: intkey-tp-python -vv -C tcp://validator-1:4004
+    depends_on:
+      - validator-1
+    stop_signal: SIGKILL
+
+  intkey-tp-2:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: intkey-tp-python -vv -C tcp://validator-2:4004
+    depends_on:
+      - validator-2
+    stop_signal: SIGKILL
+
+  intkey-tp-3:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: intkey-tp-python -vv -C tcp://validator-3:4004
+    depends_on:
+      - validator-3
+    stop_signal: SIGKILL
+
+  intkey-tp-4:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: intkey-tp-python -vv -C tcp://validator-4:4004
+    depends_on:
+      - validator-4
+    stop_signal: SIGKILL
+
+  smallbank-tp-0:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: smallbank-tp-go -vv -C tcp://validator-0:4004 --max-queue-size=200 --worker-thread-count=16
+    depends_on:
+      - validator-0
+    stop_signal: SIGKILL
+
+  smallbank-tp-1:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: smallbank-tp-go -vv -C tcp://validator-1:4004 --max-queue-size=200 --worker-thread-count=16
+    depends_on:
+      - validator-1
+    stop_signal: SIGKILL
+
+  smallbank-tp-2:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: smallbank-tp-go -vv -C tcp://validator-2:4004 --max-queue-size=200 --worker-thread-count=16
+    depends_on:
+      - validator-2
+    stop_signal: SIGKILL
+
+  smallbank-tp-3:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: smallbank-tp-go -vv -C tcp://validator-3:4004 --max-queue-size=200 --worker-thread-count=16
+    depends_on:
+      - validator-3
+    stop_signal: SIGKILL
+
+  smallbank-tp-4:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: smallbank-tp-go -vv -C tcp://validator-4:4004 --max-queue-size=200 --worker-thread-count=16
+    depends_on:
+      - validator-4
+    stop_signal: SIGKILL
+
+  settings-tp-0:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: settings-tp -vv -C tcp://validator-0:4004
+    depends_on:
+      - validator-0
+    stop_signal: SIGKILL
+
+  settings-tp-1:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: settings-tp -vv -C tcp://validator-1:4004
+    depends_on:
+      - validator-1
+    stop_signal: SIGKILL
+
+  settings-tp-2:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: settings-tp -vv -C tcp://validator-2:4004
+    depends_on:
+      - validator-2
+    stop_signal: SIGKILL
+
+  settings-tp-3:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: settings-tp -vv -C tcp://validator-3:4004
+    depends_on:
+      - validator-3
+    stop_signal: SIGKILL
+
+  settings-tp-4:
+    image: sawtooth-poet-local:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    expose:
+      - 4004
+    command: settings-tp -vv -C tcp://validator-4:4004
+    depends_on:
+      - validator-4
+    stop_signal: SIGKILL
+
+  poet-validator-registry-tp-0:
+    image: sawtooth-poet-validator-registry-tp$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: poet-validator-registry-tp -vv -C tcp://validator-0:4004
+    depends_on:
+      - validator-0
+    environment:
+      PYTHONPATH: /project/sawtooth-poet/consensus/poet/common
+    stop_signal: SIGKILL
+
+  poet-validator-registry-tp-1:
+    image: sawtooth-poet-validator-registry-tp$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: poet-validator-registry-tp -vv -C tcp://validator-1:4004
+    depends_on:
+      - validator-1
+    environment:
+      PYTHONPATH: /project/sawtooth-poet/consensus/poet/common
+    stop_signal: SIGKILL
+
+  poet-validator-registry-tp-2:
+    image: sawtooth-poet-validator-registry-tp$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: poet-validator-registry-tp -vv -C tcp://validator-2:4004
+    depends_on:
+      - validator-2
+    environment:
+      PYTHONPATH: /project/sawtooth-poet/consensus/poet/common
+    stop_signal: SIGKILL
+
+  poet-validator-registry-tp-3:
+    image: sawtooth-poet-validator-registry-tp$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: poet-validator-registry-tp -vv -C tcp://validator-3:4004
+    depends_on:
+      - validator-3
+    environment:
+      PYTHONPATH: /project/sawtooth-poet/consensus/poet/common
+    stop_signal: SIGKILL
+
+  poet-validator-registry-tp-4:
+    image: sawtooth-poet-validator-registry-tp$INSTALL_TYPE:$ISOLATION_ID
+    build:
+      context: .
+      dockerfile: Dockerfile-install
+    volumes:
+      - $SAWTOOTH_POET:/project/sawtooth-poet
+    expose:
+      - 4004
+    command: poet-validator-registry-tp -vv -C tcp://validator-4:4004
+    depends_on:
+      - validator-4
+    environment:
+      PYTHONPATH: /project/sawtooth-poet/consensus/poet/common
+    stop_signal: SIGKILL
+
