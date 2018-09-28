@@ -64,9 +64,9 @@ function generateWorkload() {
     let workload = [];
     for(let i= 0; i < txnPerBatch; i++) {
         let acc_id = generateAccount();
-        account.push(acc_id);
+        accounts.push(acc_id);
         let acc = {
-            'Verb': 'open',
+            'Verb': 'set',
             'Name': acc_id,
             'Value': initMoney
         };
