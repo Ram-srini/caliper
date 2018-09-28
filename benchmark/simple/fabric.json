@@ -28,6 +28,12 @@
           "server-hostname": "peer0.org1.example.com",
           "tls_cacerts": "/var/mynetwork/certs/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
         },
+        "peer2": {
+          "events": "grpcs://10.20.0.20:8053",
+          "requests": "grpcs://10.20.0.20:8051",
+          "server-hostname": "peer1.org1.example.com",
+          "tls_cacerts": "/var/mynetwork/certs/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
+        },
         "user": {
           "cert": "/var/mynetwork/certs/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem",
           "key": "/var/mynetwork/certs/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/8801aceeb1775e248d2462eecb70b1363fdc278e54bed9b4f9d606699c1834d1_sk"
