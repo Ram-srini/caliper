@@ -14,7 +14,7 @@
         "label" : "open",
         "txDuration" : [3000],
         "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 160}}],
-        "arguments": { "money": 10000 },
+        "arguments": { "money": 20000 },
         "callback" : "benchmark/simple/open.js"
       },
       {
