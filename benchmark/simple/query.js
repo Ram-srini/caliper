@@ -23,7 +23,7 @@ module.exports.init = function(blockchain, context, args) {
 module.exports.run = function() {
     const acc  = accounts[Math.floor(Math.random()*(accounts.length))];
 
-    return bc.queryState(contx, 'simple', 'v0', acc);
+    return bc.queryState(contx, 'intkey', 'v0', acc);
 };
 
 module.exports.end = function() {

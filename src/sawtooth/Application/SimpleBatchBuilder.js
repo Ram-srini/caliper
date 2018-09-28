@@ -42,7 +42,7 @@ class SimpleBatchBuilder extends BatchBuilder {
 
         let transactions = [];
         for(let i = 0; i < args.length; i++) {
-            const addr = args[i].account;
+            const addr = args[i].Name;
             const address = this.calculateAddress(addr);
             const addresses = [address];
 

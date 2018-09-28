@@ -30,7 +30,7 @@ class BatchBuilderFactory {
             sawtoothContractVersion = '1.0';
         }
 
-        if(familyName === 'simple') {
+        if(familyName === 'intkey') {
             return new SimpleBatchBuilder(familyName, sawtoothContractVersion);
         }
         else if(familyName === 'smallbank') {
