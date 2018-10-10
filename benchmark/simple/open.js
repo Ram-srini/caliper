@@ -9,20 +9,18 @@
 
 module.exports.info  = 'opening accounts';
 
-let accounts = [];
+let account_array = [];
 let txnPerBatch;
 let initMoney;
 let bc, contx;
 module.exports.init = function(blockchain, context, args) {
     if(!args.hasOwnProperty('money')) {
-        return Promise.reject(new Error('simple.open - "money" is missed in the arguments'));
+        return Promise.reject(new Error('simple.open - \'money\' is missed in the arguments'));
     }
     if(!args.hasOwnProperty('txnPerBatch')) {
         return Promise.reject(new Error('simple.open - \'txnPerBatch\' is missed in the arguments'));
     }
 
-    initMoney = args.money;
-    txnPerBatch = args.txnPerBatch;
     bc = blockchain;
     contx = context;
     return Promise.resolve();
@@ -53,7 +51,26 @@ function generateAccount() {
     if(typeof prefix === 'undefined') {
         prefix = get26Num(process.pid);
     }
-    return prefix + get26Num(accounts.length+1);
+    return prefix + get26Num(account_array.length+1);
+}
+
+/**
+ * Generates simple workload
+ * @returns {Object} array of json objects
+ */
+function generateWorkload() {
+    let workload = [];
+    for(let i= 0; i < txnPerBatch; i++) {
+        let acc_id = generateAccount();
+        account_array.push(acc_id);
+        let acc = {
+            'verb': 'open',
+            'account': acc_id,
+            'money': initMoney
+        };
+        workload.push(acc);
+    }
+    return workload;
 }
 
 /**
@@ -83,4 +100,4 @@ module.exports.end = function() {
     return Promise.resolve();
 };
 
-module.exports.accounts = accounts;
+module.exports.account_array = account_array;
