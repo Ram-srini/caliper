@@ -1,0 +1,28 @@
+{
+   "blockchain": {
+        "type": "sawtooth",
+        "config": "benchmark/smallbank/sawtooth.json"
+  },
+  "test": {
+    "name": "smallbank",
+    "description" : "This is smallbank benchmark for caliper",
+    "clients": {
+      "type": "local",
+      "number": 5
+    },
+    "rounds": [
+      {
+        "label" : "smallOperations",
+        "txNumber" : [10000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 70}}],
+        "arguments": {"accounts":1000, "txnPerBatch":10},
+        "callback" : "benchmark/smallbank/smallbankOperations.js"
+      },
+      {
+        "label" : "query",
+        "txNumber" : [5000],
+        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 50}}],
+        "callback" : "benchmark/smallbank/query.js"
+      }]
+  }
+}
