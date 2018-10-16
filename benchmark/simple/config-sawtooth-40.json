@@ -14,14 +14,8 @@
         "label" : "open",
         "txNumber" : [10000],
         "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 40}}],
-        "arguments": { "money": 10000, "txnPerBatch":10},
+        "arguments": { "money": 10000, "txnPerBatch":40},
         "callback" : "benchmark/simple/open.js"
-      },
-      {
-        "label" : "query",
-        "txNumber" : [5000],
-        "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 50}}],
-        "callback" : "benchmark/simple/query.js"
       }]
   },
   "monitor": {
