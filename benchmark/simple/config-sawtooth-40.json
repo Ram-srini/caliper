@@ -14,7 +14,7 @@
         "label" : "open",
         "txNumber" : [10000],
         "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 40}}],
-        "arguments": { "money": 10000, "txnPerBatch":40},
+        "arguments": { "money": 10000, "txnPerBatch":10},
         "callback" : "benchmark/simple/open.js"
       }]
   },
