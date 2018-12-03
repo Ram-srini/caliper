@@ -30,8 +30,8 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 44FC67F19B2466EA && \
-    apt-add-repository "deb http://repo.sawtooth.me/ubuntu/bumper/nightly xenial universe" && \
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD && \
+    apt-add-repository "deb http://repo.sawtooth.me/ubuntu/bumper/stable xenial universe" && \
 	apt-get update && \
 	apt-get install -y python3-sawtooth-cli python3-sawtooth-intkey python3-sawtooth-poet-cli python3-sawtooth-poet-common python3-sawtooth-poet-core python3-sawtooth-poet-families python3-sawtooth-poet-simulator python3-sawtooth-rest-api python3-sawtooth-sdk python3-sawtooth-settings python3-sawtooth-signing python3-sawtooth-validator sawtooth-smallbank-tp-go python3-sawtooth-poet-engine python3-sawtooth-poet-sgx python3-sawtooth-ias-client python3-sawtooth-ias-proxy python3-sawtooth-identity python3-sawtooth-integration 
 

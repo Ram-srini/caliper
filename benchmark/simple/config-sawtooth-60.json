@@ -8,13 +8,13 @@
     "description" : "This is an example benchmark for caliper, to test the backend DLT's performance with simple account opening & querying transactions",
     "clients": {
       "type": "local",
-      "number": 5
+      "number": 1
     },
     "rounds": [{
         "label" : "open",
         "txNumber" : [10000],
         "rateControl" : [{"type": "fixed-rate", "opts": {"tps" : 60}}],
-        "arguments": { "money": 10000, "txnPerBatch":60},
+        "arguments": { "money": 10000, "txnPerBatch":10},
         "callback" : "benchmark/simple/open.js"
       }]
   },

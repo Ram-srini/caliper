@@ -57,8 +57,8 @@ services:
           sawtooth.poet.valid_enclave_basenames=$$(poet enclave basename) \
           -o config.batch && \
 		sawset proposal create -k /etc/sawtooth/keys/validator.priv \
-		sawtooth.poet.target_wait_time=1 \
-		sawtooth.poet.initial_wait_time=5 \
+		sawtooth.poet.target_wait_time=30 \
+		sawtooth.poet.initial_wait_time=300 \
         sawtooth.publisher.max_batches_per_block=1000 \
         sawtooth.poet.ztest_minimum_win_count=10000 \
         sawtooth.poet.key_block_claim_limit=100000 \
@@ -308,7 +308,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: intkey-tp-python -vv -C tcp://validator-0:4004
+    command: intkey-tp-go -vv -C tcp://validator-0:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-0
     stop_signal: SIGKILL
@@ -320,7 +320,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: intkey-tp-python -vv -C tcp://validator-1:4004
+    command: intkey-tp-go -vv -C tcp://validator-1:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-1
     stop_signal: SIGKILL
@@ -332,7 +332,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: intkey-tp-python -vv -C tcp://validator-2:4004
+    command: intkey-tp-go -vv -C tcp://validator-2:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-2
     stop_signal: SIGKILL
@@ -344,7 +344,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: intkey-tp-python -vv -C tcp://validator-3:4004
+    command: intkey-tp-go -vv -C tcp://validator-3:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-3
     stop_signal: SIGKILL
@@ -356,7 +356,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: intkey-tp-python -vv -C tcp://validator-4:4004
+    command: intkey-tp-go -vv -C tcp://validator-4:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-4
     stop_signal: SIGKILL
@@ -370,7 +370,7 @@ services:
       - $SAWTOOTH_POET:/project/sawtooth-poet
     expose:
       - 4004
-    command: smallbank-tp-go -vv -C tcp://validator-0:4004 --max-queue-size=200 --worker-thread-count=16
+    command: smallbank-tp-go -vv -C tcp://validator-0:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-0
     stop_signal: SIGKILL
@@ -382,7 +382,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: smallbank-tp-go -vv -C tcp://validator-1:4004 --max-queue-size=200 --worker-thread-count=16
+    command: smallbank-tp-go -vv -C tcp://validator-1:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-1
     stop_signal: SIGKILL
@@ -394,7 +394,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: smallbank-tp-go -vv -C tcp://validator-2:4004 --max-queue-size=200 --worker-thread-count=16
+    command: smallbank-tp-go -vv -C tcp://validator-2:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-2
     stop_signal: SIGKILL
@@ -406,7 +406,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: smallbank-tp-go -vv -C tcp://validator-3:4004 --max-queue-size=200 --worker-thread-count=16
+    command: smallbank-tp-go -vv -C tcp://validator-3:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-3
     stop_signal: SIGKILL
@@ -418,7 +418,7 @@ services:
       dockerfile: Dockerfile-install
     expose:
       - 4004
-    command: smallbank-tp-go -vv -C tcp://validator-4:4004 --max-queue-size=200 --worker-thread-count=16
+    command: smallbank-tp-go -vv -C tcp://validator-4:4004 --max-queue-size=1024 --worker-thread-count=32
     depends_on:
       - validator-4
     stop_signal: SIGKILL
