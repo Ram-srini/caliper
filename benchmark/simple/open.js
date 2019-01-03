@@ -76,14 +76,8 @@ function generateWorkload() {
 }
 
 module.exports.run = function() {
-<<<<<<< HEAD
-    let newAcc = generateAccount();
-    accounts.push(newAcc);
-    return bc.invokeSmartContract(contx, 'simple', 'v0', {verb: 'open', account: newAcc, money: initMoney}, 60);
-=======
     let args = generateWorkload();
     return bc.invokeSmartContract(contx, 'simple', 'v0', args, 100);
->>>>>>> bfb73b86e5ae8f0b5f91966fcb3687b27c5d0c31
 };
 
 module.exports.end = function() {
