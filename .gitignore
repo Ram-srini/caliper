@@ -6,6 +6,9 @@ node_modules/*
 package-lock.json
 output.log
 
+#Ignore default Caliper log location
+log/
+
 # Ignore any generted html files
 *.html
 
@@ -27,3 +30,8 @@ zookeeper.out
 
 # Ignore IDE files
 .vscode/*
+
+# Website files
+.sass-cache/
+Gemfile.lock
+_site/
