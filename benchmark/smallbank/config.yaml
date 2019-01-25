@@ -8,22 +8,91 @@ test:
   rounds:
   - label: smallOperations
     txNumber:
-    - 500
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
+    - 10000
     rateControl:
     - type: fixed-rate
       opts:
-        tps: 20
+        tps: 100
+    - type: fixed-rate
+      opts:
+        tps: 150
+    - type: fixed-rate
+      opts:
+        tps: 200
+    - type: fixed-rate
+      opts:
+        tps: 250
+    - type: fixed-rate
+      opts:
+        tps: 300
+    - type: fixed-rate
+      opts:
+        tps: 350
+    - type: fixed-rate
+      opts:
+        tps: 400
+    - type: fixed-rate
+      opts:
+        tps: 450
+    - type: fixed-rate
+      opts:
+        tps: 500
+    - type: fixed-rate
+      opts:
+        tps: 550
     arguments:
-      accounts: 400
+      accounts: 10000
       txnPerBatch: 1
     callback: benchmark/smallbank/smallbankOperations.js
   - label: query
     txNumber:
-    - 500
+    - 5000
+    - 5000
+    - 5000
+    - 5000
+    - 5000
+    - 5000
+    - 5000
+    - 5000
+    - 5000
     rateControl:
     - type: fixed-rate
       opts:
-        tps: 50
+        tps: 100
+    - type: fixed-rate
+      opts:
+        tps: 200
+    - type: fixed-rate
+      opts:
+        tps: 300
+    - type: fixed-rate
+      opts:
+        tps: 400
+    - type: fixed-rate
+      opts:
+        tps: 500
+    - type: fixed-rate
+      opts:
+        tps: 600
+    - type: fixed-rate
+      opts:
+        tps: 700
+    - type: fixed-rate
+      opts:
+        tps: 800
+    - type: fixed-rate
+      opts:
+        tps: 900
     callback: benchmark/smallbank/query.js
 monitor:
   type: docker
