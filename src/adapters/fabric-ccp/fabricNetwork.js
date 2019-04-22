@@ -300,9 +300,9 @@ class FabricNetwork {
                     contractID = cc.id;
                 }
 
-                if (this.contractMapping.has(contractID)) {
-                    throw new Error(`Contract ID ${contractID} is used more than once in the configuration`);
-                }
+                //if (this.contractMapping.has(contractID)) {
+                //    throw new Error(`Contract ID ${contractID} is used more than once in the configuration`);
+                //}
 
                 // add the mapping for the contract ID
                 this.contractMapping.set(contractID, {channel: channel, id: cc.id, version: cc.version});
