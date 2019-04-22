@@ -2,11 +2,13 @@
 
 # Prior to generation, need to run:
 # export FABRIC_CFG_PATH=<path to directory>
-rm -rf crypto-config
+
 # The below assumes you have the relevant code available to generate the cryto-material
-~/fabric-samples/bin/cryptogen generate --config=./crypto-config.yaml
-~/fabric-samples/bin/configtxgen -profile OrgsOrdererGenesis -outputBlock orgs.genesis.block
-~/fabric-samples/bin/configtxgen -profile OrgsChannel -outputCreateChannelTx mychannel.tx -channelID mychannel
+export FABRIC_SAMPLE_BIN=~/fabric-samples-1.4/bin
+$FABRIC_SAMPLE_BIN/cryptogen generate --config=./crypto-config.yaml
+$FABRIC_SAMPLE_BIN/configtxgen -profile OrgsOrdererGenesis -outputBlock orgs.genesis.block
+$FABRIC_SAMPLE_BIN/configtxgen -profile OrgsChannel1 -outputCreateChannelTx mychannel.tx -channelID mychannel
+$FABRIC_SAMPLE_BIN/configtxgen -profile OrgsChannel2 -outputCreateChannelTx yourchannel.tx -channelID yourchannel
 
 # Rename the key files we use to be key.pem instead of a uuid
 for KEY in $(find crypto-config -type f -name "*_sk"); do
