@@ -4,35 +4,6 @@
 #
 
 ---
-################################################################################
-#
-#   Profile
-#
-#   - Different configuration profiles may be encoded here to be specified
-#   as parameters to the configtxgen tool
-#
-################################################################################
-Profiles:
-
-    OrgsOrdererGenesis:
-        Orderer:
-            <<: *OrdererDefaults
-            Organizations:
-                - *OrdererOrg
-        Consortiums:
-            SampleConsortium:
-                Organizations:
-                    - *Org0
-                    - *Org1
-                    - *Org2
-    OrgsChannel:
-        Consortium: SampleConsortium
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - *Org0
-                - *Org1
-                - *Org2
 
 ################################################################################
 #
@@ -79,8 +50,6 @@ Organizations:
               Port: 7051
             - Host: peer1.org1.example.com
               Port: 7051
-            - Host: peer2.org1.example.com
-              Port: 7051
 
     - &Org1
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -102,31 +71,6 @@ Organizations:
               Port: 7051
             - Host: peer1.org2.example.com
               Port: 7051
-            - Host: peer2.org2.example.com
-              Port: 7051
-
-    - &Org2
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: Org3MSP
-
-        # ID to load the MSP definition as
-        ID: Org3MSP
-
-        MSPDir: crypto-config/peerOrganizations/org3.example.com/msp
-
-        AdminPrincipal: Role.ADMIN
-
-        AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: peer0.org3.example.com
-              Port: 7051
-            - Host: peer1.org3.example.com
-              Port: 7051
-            - Host: peer2.org3.example.com
-              Port: 7051
 
 ################################################################################
 #
@@ -146,17 +90,17 @@ Orderer: &OrdererDefaults
         - orderer.example.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
-    BatchTimeout: 250ms
+    BatchTimeout: 1s
 
     # Batch Size: Controls the number of messages batched into a block
     BatchSize:
 
         # Max Message Count: The maximum number of messages to permit in a batch
-        MaxMessageCount: 10
+        MaxMessageCount: 500
 
         # Absolute Max Bytes: The absolute maximum number of bytes allowed for
         # the serialized messages in a batch.
-        AbsoluteMaxBytes: 128 MB
+        AbsoluteMaxBytes: 998 MB
 
         # Preferred Max Bytes: The preferred maximum number of bytes allowed for
         # the serialized messages in a batch. A message larger than the preferred
@@ -188,3 +132,31 @@ Application: &ApplicationDefaults
     # Organizations is the list of orgs which are defined as participants on
     # the application side of the network
     Organizations:
+
+################################################################################
+#
+#   Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool
+#
+################################################################################
+Profiles:
+
+    OrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org0
+                    - *Org1
+    OrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org0
+                - *Org1
