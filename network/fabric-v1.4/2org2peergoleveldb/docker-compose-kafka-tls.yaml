@@ -52,10 +52,13 @@ services:
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/msp/orderer/tls/ca.crt]
       - ORDERER_HOST=orderer0.example.com
+      - ORDERER_GENERAL_PROFILE_ENABLED=true
+      - ORDERER_GENERAL_PROFILE_ADDRESS=0.0.0.0:6064
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     ports:
       - 7050:7050
+      - 6064:6060
     volumes:
       - ../kafka_config/:/etc/hyperledger/configtx
       - ../kafka_config/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/:/etc/hyperledger/msp/orderer
@@ -80,10 +83,13 @@ services:
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/msp/orderer/tls/ca.crt]
       - ORDERER_HOST=orderer1.example.com
+      - ORDERER_GENERAL_PROFILE_ENABLED=true
+      - ORDERER_GENERAL_PROFILE_ADDRESS=0.0.0.0:6065
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     ports:
       - 8050:7050
+      - 6065:6060
     volumes:
       - ../kafka_config/:/etc/hyperledger/configtx
       - ../kafka_config/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/:/etc/hyperledger/msp/orderer
@@ -113,11 +119,15 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 7051:7051
       - 7053:7053
+      - 6060:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../kafka_config/mychannel.tx:/etc/hyperledg../kafka_configtx/mychannel.tx
@@ -145,11 +155,15 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6061
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 7057:7051
       - 7059:7053
+      - 6061:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../kafka_config/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/:/etc/hyperledger/msp/peer
@@ -177,11 +191,15 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6062
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 8051:7051
       - 8053:7053
+      - 6062:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../kafka_config/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peer
@@ -207,11 +225,15 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6063
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 8057:7051
       - 8059:7053
+      - 6063:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../kafka_config/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/:/etc/hyperledger/msp/peer

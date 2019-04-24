@@ -2,8 +2,8 @@
   "caliper": {
     "blockchain": "fabric",
     "command" : {
-      "start": "docker-compose -f network/fabric-v1.4/2org2peergoleveldb/docker-compose-tls.yaml up -d;sleep 3s",
-      "end" : "docker-compose -f network/fabric-v1.4/2org2peergoleveldb/docker-compose-tls.yaml down;docker rm $(docker ps -aq);docker rmi $(docker images dev* -q)"
+      "start": "docker-compose -f network/fabric-v1.4/2org4peergoleveldb/docker-compose-tls.yaml up -d;sleep 10s",
+      "end" : "docker-compose -f network/fabric-v1.4/2org4peergoleveldb/docker-compose-tls.yaml down;docker rm $(docker ps -aq);docker rmi $(docker images dev* -q)"
     }
   },
   "fabric": {
@@ -35,6 +35,18 @@
           "events": "grpcs://localhost:7059",
           "server-hostname": "peer1.org1.example.com",
           "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt"
+        },
+        "peer3": {
+          "requests": "grpcs://localhost:7067",
+          "events": "grpcs://localhost:7069",
+          "server-hostname": "peer2.org1.example.com",
+          "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls/ca.crt"
+        },
+        "peer4": {
+          "requests": "grpcs://localhost:7077",
+          "events": "grpcs://localhost:7079",
+          "server-hostname": "peer3.org1.example.com",
+          "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/tls/ca.crt"
         }
       },
       "org2": {
@@ -56,6 +68,18 @@
           "events": "grpcs://localhost:8059",
           "server-hostname": "peer1.org2.example.com",
           "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt"
+        },
+        "peer3": {
+          "requests": "grpcs://localhost:8067",
+          "events": "grpcs://localhost:8069",
+          "server-hostname": "peer2.org2.example.com",
+          "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/tls/ca.crt"
+        },
+        "peer4": {
+          "requests": "grpcs://localhost:8077",
+          "events": "grpcs://localhost:8079",
+          "server-hostname": "peer3.org2.example.com",
+          "tls_cacerts": "network/fabric-v1.4/config/crypto-config/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/tls/ca.crt"
         }
       }
     },
@@ -106,7 +130,7 @@
   },
   "info" : {
     "Version": "1.4.0",
-    "Size": "2 Orgs with 2 Peers",
+    "Size": "2 Orgs with 8 Peers",
     "Orderer": "Solo",
     "Distribution": "Single Host"
   }

@@ -51,10 +51,13 @@ services:
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/msp/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/msp/orderer/tls/ca.crt, /etc/hyperledger/msp/peerOrg1/tls/ca.crt, /etc/hyperledger/msp/peerOrg2/tls/ca.crt]
+      - ORDERER_GENERAL_PROFILE_ENABLED=true
+      - ORDERER_GENERAL_PROFILE_ADDRESS=0.0.0.0:6060
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     ports:
       - 7050:7050
+      - 6068:6060
     volumes:
         - ../config/:/etc/hyperledger/configtx
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -80,12 +83,17 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
+
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 7051:7051
       - 7053:7053
+      - 6060:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/mychannel.tx:/etc/hyperledger/configtx/mychannel.tx
@@ -114,12 +122,16 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 7057:7051
       - 7059:7053
+      - 6061:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -127,7 +139,80 @@ services:
         - ../config/crypto-config/peerOrganizations/org1.example.com/users/:/etc/hyperledger/msp/users
     depends_on:
       - orderer.example.com
-      - peer0.org1.example.com
+
+  peer2.org1.example.com:
+    container_name: peer2.org1.example.com
+    image: hyperledger/fabric-peer:1.4.0
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer2.org1.example.com
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
+      - CORE_PEER_ADDRESS=peer2.org1.example.com:7051
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org1.example.com:7051
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 7067:7051
+      - 7069:7053
+      - 6062:6060
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+        - ../config/crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/:/etc/hyperledger/msp/peer
+        - ../config/crypto-config/peerOrganizations/org1.example.com/users/:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
+
+  peer3.org1.example.com:
+    container_name: peer3.org1.example.com
+    image: hyperledger/fabric-peer:1.4.0
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer3.org1.example.com
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
+      - CORE_PEER_ADDRESS=peer3.org1.example.com:7051
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org1.example.com:7051
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 7077:7051
+      - 7079:7053
+      - 6063:6060
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+        - ../config/crypto-config/peerOrganizations/org1.example.com/peers/peer3.org1.example.com/:/etc/hyperledger/msp/peer
+        - ../config/crypto-config/peerOrganizations/org1.example.com/users/:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
@@ -148,12 +233,16 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 8051:7051
       - 8053:7053
+      - 6064:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -181,12 +270,16 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
       - 8057:7051
       - 8059:7053
+      - 6065:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -194,3 +287,78 @@ services:
         - ../config/crypto-config/peerOrganizations/org2.example.com/users/:/etc/hyperledger/msp/users
     depends_on:
       - orderer.example.com
+
+  peer2.org2.example.com:
+    container_name: peer2.org2.example.com
+    image: hyperledger/fabric-peer:1.4.0
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer2.org2.example.com
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
+      - CORE_PEER_ADDRESS=peer2.org2.example.com:7051
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org2.example.com:7051
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 8067:7051
+      - 8069:7053
+      - 6066:6060
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+        - ../config/crypto-config/peerOrganizations/org2.example.com/peers/peer2.org2.example.com/:/etc/hyperledger/msp/peer
+        - ../config/crypto-config/peerOrganizations/org2.example.com/users/:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
+
+  peer3.org2.example.com:
+    container_name: peer3.org2.example.com
+    image: hyperledger/fabric-peer:1.4.0
+    environment:
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer3.org2.example.com
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
+      - CORE_PEER_ADDRESS=peer3.org2.example.com:7051
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.org2.example.com:7051
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/msp/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org4peergoleveldb_default
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 8077:7051
+      - 8079:7053
+      - 6067:6060
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+        - ../config/crypto-config/peerOrganizations/org2.example.com/peers/peer3.org2.example.com/:/etc/hyperledger/msp/peer
+        - ../config/crypto-config/peerOrganizations/org2.example.com/users/:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
+

@@ -48,6 +48,8 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_PROFILE_ENABLED=true
+      - ORDERER_GENERAL_PROFILE_ADDRESS=0.0.0.0:6060
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/msp/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/msp/orderer/tls/ca.crt, /etc/hyperledger/msp/peerOrg1/tls/ca.crt, /etc/hyperledger/msp/peerOrg2/tls/ca.crt]
@@ -55,6 +57,7 @@ services:
     command: orderer
     ports:
       - 7050:7050
+      - 6064:6060
     volumes:
         - ../config/:/etc/hyperledger/configtx
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -70,6 +73,9 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.org1.example.com
       - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
@@ -86,6 +92,7 @@ services:
     ports:
       - 7051:7051
       - 7053:7053
+      - 6060:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/mychannel.tx:/etc/hyperledger/configtx/mychannel.tx
@@ -104,6 +111,9 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org1.example.com
       - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
       - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
@@ -120,6 +130,7 @@ services:
     ports:
       - 7057:7051
       - 7059:7053
+      - 6061:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -141,6 +152,9 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
       - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
@@ -154,6 +168,7 @@ services:
     ports:
       - 8051:7051
       - 8053:7053
+      - 6062:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
@@ -174,6 +189,9 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/msp/
       - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
       - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOMAXPROCS=32
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6060
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
@@ -187,6 +205,7 @@ services:
     ports:
       - 8057:7051
       - 8059:7053
+      - 6063:6060
     volumes:
         - /var/run/:/host/var/run/
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer

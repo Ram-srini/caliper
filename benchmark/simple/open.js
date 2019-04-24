@@ -30,7 +30,7 @@ module.exports.init = function(blockchain, context, args) {
 };
 
 const dic = 'abcdefghijklmnopqrstuvwxyz';
-const chaincodes = ['simple1','simple2']
+//const chaincodes = ['simple1','simple2']
 /**
  * Generate string by picking characters from dic variable
  * @param {*} number character to select
@@ -86,7 +86,7 @@ function generateWorkload() {
 
 module.exports.run = function() {
     let args = generateWorkload();
-    return bc.invokeSmartContract(contx, chaincodes[Math.random()*Math.floor(2)], 'v0', args, 100);
+    return bc.invokeSmartContract(contx, 'simple', 'v0', args, 100);
 };
 
 module.exports.end = function() {
