@@ -51,6 +51,7 @@ services:
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/msp/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/msp/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/msp/orderer/tls/ca.crt, /etc/hyperledger/msp/peerOrg1/tls/ca.crt, /etc/hyperledger/msp/peerOrg2/tls/ca.crt]
+      - ORDERER_FILELEDGER_LOCATION=/var/hyperledger/production/orderer
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     ports:
@@ -60,6 +61,7 @@ services:
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ../config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
         - ../config/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peerOrg2
+        - /data/hyperledger/production/orderer:/var/hyperledger/production/orderer
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
@@ -81,6 +83,8 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/production
+      - CORE_PEER_GOMAXPROCS=32
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -92,6 +96,7 @@ services:
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ../config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peer
         - ../config/crypto-config/peerOrganizations/org1.example.com/users/:/etc/hyperledger/msp/users
+        - /data/hyperledger/production1:/var/hyperledger/production
     depends_on:
       - orderer.example.com
 
@@ -115,6 +120,8 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/production
+      - CORE_PEER_GOMAXPROCS=32
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -125,6 +132,7 @@ services:
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ../config/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/:/etc/hyperledger/msp/peer
         - ../config/crypto-config/peerOrganizations/org1.example.com/users/:/etc/hyperledger/msp/users
+        - /data/hyperledger/production2:/var/hyperledger/production
     depends_on:
       - orderer.example.com
       - peer0.org1.example.com
@@ -149,6 +157,8 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/production
+      - CORE_PEER_GOMAXPROCS=32
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -159,6 +169,7 @@ services:
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ../config/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peer
         - ../config/crypto-config/peerOrganizations/org2.example.com/users/:/etc/hyperledger/msp/users
+        - /data/hyperledger/production3:/var/hyperledger/production
     depends_on:
       - orderer.example.com
 
@@ -182,6 +193,8 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/msp/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/msp/peer/tls/ca.crt
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=2org2peergoleveldb_default
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/production
+      - CORE_PEER_GOMAXPROCS=32
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -192,5 +205,6 @@ services:
         - ../config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ../config/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/:/etc/hyperledger/msp/peer
         - ../config/crypto-config/peerOrganizations/org2.example.com/users/:/etc/hyperledger/msp/users
+        - /data/hyperledger/production4:/var/hyperledger/production
     depends_on:
       - orderer.example.com
